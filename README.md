@@ -23,7 +23,7 @@ feh --bg-fill `ls -d ~/wallpaper/night/* | shuf -n 1` `ls -d ~/wallpaper/dayLigh
 feh --bg-fill --randomize ~/wallpaper/night/* ~/wallpaper/dayLight/*
 ```
 ## 壁紙切り替えを定時実行する
-切り替え実行はcronで行う．servise,timerを作成．
+切り替え実行はsystemdのTimerで行う．servise,timerを作成．
 ```bash
 cd ~/.config/systemd/user/
 touch change_wallpaper.service change_wallpaper.timer
