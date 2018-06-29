@@ -6,7 +6,11 @@ day_time=6
 night_time=20
 
 if [ $now -lt $night_time -a $now -gt $day_time ]; then
-  feh --bg-fill `ls -d ~/wallpaper/dayLight/horizontal/* | shuf -n 1` `ls -d ~/wallpaper/dayLight/vertical/* | shuf -n 1`
+  horizontal_file_path=~/wallpaper/dayLight/horizontal/*
+  vertical_file_path="~/wallpaper/dayLight/vertical/*"
 else
-  feh --bg-fill `ls -d ~/wallpaper/night/horizontal/* | shuf -n 1` `ls -d ~/wallpaper/night/vertical/* | shuf -n 1`
+  horizontal_file_path="~/wallpaper/night/horizontal/*"
+  vertical_file_path="~/wallpaper/night/vertical/*"
 fi
+# gsettings set org.gnome.desktop.background picture-uri `$horizontal_file_path | shuf -n 1` `ls -d $vertical_file_path | shuf -n 1`
+gsettings set org.gnome.desktop.background picture-uri `ls -d $horizontal_file_path | shuf -n 1`
