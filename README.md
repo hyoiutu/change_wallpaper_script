@@ -1,5 +1,5 @@
-# fehコマンドで壁紙を変更する
-昼と夜の壁紙を別のところから持ってきたかったのでfehコマンドで壁紙を変更できるようにした．
+# systemdのTimerで壁紙を変更する
+昼と夜の壁紙を別のところから持ってきたかったのでコマンドで壁紙を変更できるようにした．
 ## 昼と夜の分け方
 ``` bash
 now=$(date +"%H")
@@ -14,7 +14,7 @@ fi
 ## 壁紙用のディレクトリを用意する
 分ける時間帯の数だけディレクトリを用意する．
 私の場合は昼と夜で分けるのでdayLightディレクトリとnightディレクトリの2つを用意した．
-## fehコマンドで壁紙を設定する
+## Arhc Linuxの場合fehコマンドで壁紙を設定する
 ``` bash
 feh --bg-fill `ls -d ~/wallpaper/night/* | shuf -n 1` `ls -d ~/wallpaper/dayLight/* | shuf -n 1`
 ```
@@ -22,6 +22,15 @@ feh --bg-fill `ls -d ~/wallpaper/night/* | shuf -n 1` `ls -d ~/wallpaper/dayLigh
 ```bash
 feh --bg-fill --randomize ~/wallpaper/night/* ~/wallpaper/dayLight/*
 ```
+## Ubuntuの場合gsettingsコマンドで壁紙を設定する
+``` bash
+gsettings set org.gnome.desktop.background picture-uri `ls -d ~/wallpaper/night/* | shuf -n 1` `ls -d ~/wallpaper/dayLight/* | shuf -n 1`
+```
+それぞれの画面でそれぞれ指定したディレクトリからランダムに選択するには，ランダムな行から文を取り出す，shufコマンドにlsの実行結果をパイプで渡し，その実行結果をgsettingsの引数として取る．
+```bash
+feh --bg-fill --randomize ~/wallpaper/night/* ~/wallpaper/dayLight/*
+```
+
 ## 壁紙切り替えを定時実行する
 切り替え実行はsystemdのTimerで行う．servise,timerを作成．
 ```bash
@@ -50,9 +59,17 @@ Description=change wallpaper!
 [Timer]
 OnBootSec=15s
 OnUnitActiveSec=15s
-Unit=wallpaper.service
+Unit=change_wallpaper.service
 
 [Install]
 WantedBy=timers.target
 ```
 
+## service, timerを有効にする
+``` bash
+systemctl --user daemon-reload
+systemctl --user enable change_wallpaper.service
+systemctl --user start change_wallpaper.service
+systemctl --user enable change_wallpaper.service
+systemctl --user start change_wallpaper.service
+```
